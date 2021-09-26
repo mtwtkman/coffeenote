@@ -1,13 +1,10 @@
-use std::env;
+mod infrastructures;
+mod result;
 
-use warp::Filter;
-
-mod domain;
-mod infrastructure;
-pub mod result;
-
-use infrastructure::database;
+use infrastructures::database;
 use result::{CoffeeNoteResult, Error};
+use std::env;
+use warp::Filter;
 
 pub fn read_env(key: &str) -> CoffeeNoteResult<String> {
     env::var(key).map_err(|_| Error::MissingEnvVar(key.to_owned()))
@@ -20,8 +17,8 @@ async fn main() -> CoffeeNoteResult<()> {
     let hello = warp::path!("hi").map(|| format!("hi yo"));
     warp::serve(hello)
         .tls()
-        .cert_path("tls/cert.pem")
-        .key_path("tls/key.pem")
+        .cert_path("coffeenote-api/tls/cert.pem")
+        .key_path("coffeenote-api/tls/key.pem")
         .run(([0, 0, 0, 0], 55301))
         .await;
     Ok(())

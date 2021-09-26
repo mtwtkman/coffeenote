@@ -4,21 +4,17 @@ services:
     build: .
     command: cargo run
     env_file:
-      - ./env_files/db.env
+      - ./coffeenote-api/env_files/db.env
     ports:
       - "55301:55301"
     depends_on:
       - db
     volumes:
-      - ./tls:/app/tls:ro
-      - ./src:/app/src
-      - ./Cargo.toml:/app/Cargo.toml
-      - ./Cargo.lock:/app/Cargo.lock
-      - ./migrations:/app/migrations
+      - .:/app
   db:
     image: postgres:alpine
     env_file:
-      - ./env_files/db.env
+      - ./coffeenote-api/env_files/db.env
     volumes:
       - "dbdata:/var/lib/postgresql/data"
     ports:
