@@ -27,12 +27,12 @@ pub enum DeleteError {
     NotFound,
 }
 
-pub struct CreateProductionArea {
+pub struct NewProductionArea {
     name: ProductionAreaName,
     region: Region,
 }
 
-impl CreateProductionArea {
+impl NewProductionArea {
     pub fn new(name: String, region: Region) -> Self {
         Self {
             name: ProductionAreaName::from(name),
@@ -44,6 +44,6 @@ impl CreateProductionArea {
 pub trait ProductionAreaRepository: CoffeeNoteRepository<ProductionArea> {
     fn fetch_one(&self, id: ProductionAreaId) -> Result<ProductionArea, FetchOneError>;
     fn fetch_all(&self) -> Result<Vec<ProductionArea>, FetchAllError>;
-    fn create(&self, value: CreateProductionArea) -> Result<ProductionArea, CreateError>;
+    fn create(&self, value: NewProductionArea) -> Result<ProductionArea, CreateError>;
     fn delete(&self, id: ProductionAreaId) -> Result<(), DeleteError>;
 }
