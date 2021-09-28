@@ -3,7 +3,6 @@ use crate::entities::{
     production_area::ProductionArea,
     shop::Shop,
 };
-use crate::repositories::CoffeeNoteRepository;
 use chrono::{DateTime, Utc};
 
 #[derive(Debug)]
@@ -52,7 +51,7 @@ impl CreateBean {
     }
 }
 
-trait BeanRepository: CoffeeNoteRepository<Bean> {
+trait BeanRepository {
     fn fetch_one(&self, id: BeanId) -> Result<Bean, FetchOneError>;
     fn fetch_all(&self) -> Result<Vec<Bean>, FetchAllError>;
     fn create(&self, value: CreateBean) -> Result<Bean, CreateError>;

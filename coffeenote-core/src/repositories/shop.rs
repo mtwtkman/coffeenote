@@ -1,5 +1,4 @@
 use crate::entities::shop::{Shop, ShopId, ShopName, ShopUrl};
-use crate::repositories::CoffeeNoteRepository;
 
 #[derive(Debug)]
 pub enum FetchOneError {
@@ -38,7 +37,7 @@ impl CreateShop {
     }
 }
 
-pub trait ShopRepository: CoffeeNoteRepository<Shop> {
+pub trait ShopRepository {
     fn fetch_one(&self, id: ShopId) -> Result<Shop, FetchOneError>;
     fn fetch_all(&self) -> Result<Vec<Shop>, FetchAllError>;
     fn create(&self, value: CreateShop) -> Result<Shop, CreateError>;

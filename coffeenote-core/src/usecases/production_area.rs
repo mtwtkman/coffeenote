@@ -27,14 +27,15 @@ impl<R: ProductionAreaRepository> CreateProductionArea<R> {
         Self { repo }
     }
 
-    pub fn exec(&self, req: Request) -> Result<Response, Error> {
-        let name = ProductionAreaName::from(req.name);
+    pub async fn exec(&self, req: Request) -> Result<Response, Error> {
+        let name = ProductionAreaName::from(req.name.clone());
         if let Err(invalid) = name.validate() {
             return Err(Error::InvalidParameter(invalid));
         }
-        let param = NewProductionArea::new(name, req.region);
+        let param = NewProductionArea::new(req.name, req.region);  // TODO: I must decide that req.name should be ProductionAreaName or not.
         self.repo
             .create(param)
+            .await
             .map(|production_area| Response { production_area })
             .map_err(Error::CreatError)
     }

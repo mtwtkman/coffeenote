@@ -1,7 +1,9 @@
+use std::ops::Deref;
 use uuid::Uuid;
 
 use super::{region::Region, CoffeeNoteEntity, CoffeeNoteValueObject, Validate, ValidationResult, Invalid, Valid};
 
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ProductionAreaId(Uuid);
 impl CoffeeNoteValueObject for ProductionAreaId {}
 impl From<Uuid> for ProductionAreaId {
@@ -10,6 +12,7 @@ impl From<Uuid> for ProductionAreaId {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ProductionAreaName(String);
 impl CoffeeNoteValueObject for ProductionAreaName {}
 impl ProductionAreaName {
@@ -33,7 +36,14 @@ impl From<String> for ProductionAreaName {
         Self(v)
     }
 }
+impl Deref for ProductionAreaName {
+    type Target = String;
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
 
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ProductionArea {
     pub id: ProductionAreaId,
     pub name: ProductionAreaName,

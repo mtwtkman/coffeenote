@@ -1,6 +1,6 @@
-use super::CoffeeNoteRepository;
+use async_trait::async_trait;
 use crate::entities::{
-    production_area::{ProductionArea, ProductionAreaId, ProductionAreaName},
+    production_area::{ProductionArea, ProductionAreaId},
     region::Region,
 };
 
@@ -28,19 +28,20 @@ pub enum DeleteError {
 }
 
 pub struct NewProductionArea {
-    name: ProductionAreaName,
-    region: Region,
+    pub name: String,
+    pub region: Region,
 }
 
 impl NewProductionArea {
-    pub fn new(name: ProductionAreaName, region: Region) -> Self {
+    pub fn new(name: String, region: Region) -> Self {
         Self { name, region }
     }
 }
 
-pub trait ProductionAreaRepository: CoffeeNoteRepository<ProductionArea> {
-    fn fetch_one(&self, id: ProductionAreaId) -> Result<ProductionArea, FetchOneError>;
-    fn fetch_all(&self) -> Result<Vec<ProductionArea>, FetchAllError>;
-    fn create(&self, value: NewProductionArea) -> Result<ProductionArea, CreateError>;
-    fn delete(&self, id: ProductionAreaId) -> Result<(), DeleteError>;
+#[async_trait]
+pub trait ProductionAreaRepository {
+    async fn fetch_one(&self, id: ProductionAreaId) -> Result<ProductionArea, FetchOneError>;
+    async fn fetch_all(&self) -> Result<Vec<ProductionArea>, FetchAllError>;
+    async fn create(&self, value: NewProductionArea) -> Result<ProductionArea, CreateError>;
+    async fn delete(&self, id: ProductionAreaId) -> Result<(), DeleteError>;
 }

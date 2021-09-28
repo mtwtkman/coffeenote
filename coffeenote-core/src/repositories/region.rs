@@ -1,5 +1,3 @@
-use super::CoffeeNoteRepository;
-
 use crate::entities::region::{Region, RegionId, RegionName};
 
 #[derive(Debug)]
@@ -37,7 +35,7 @@ impl CreateRegion {
     }
 }
 
-pub trait RegionRepository: CoffeeNoteRepository<Region> {
+pub trait RegionRepository {
     fn fetch_one(&self, id: RegionId) -> Result<Region, FetchOneError>;
     fn fetch_all(&self) -> Result<Vec<Region>, FetchAllError>;
     fn create(&self, value: CreateRegion) -> Result<Region, CreateError>;

@@ -2,6 +2,7 @@ use uuid::Uuid;
 
 use super::{CoffeeNoteEntity, CoffeeNoteValueObject};
 
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RegionId(Uuid);
 impl CoffeeNoteValueObject for RegionId {}
 impl From<Uuid> for RegionId {
@@ -10,6 +11,7 @@ impl From<Uuid> for RegionId {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RegionName(String);
 impl CoffeeNoteValueObject for RegionName {}
 impl From<String> for RegionName {
@@ -18,6 +20,7 @@ impl From<String> for RegionName {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Region {
     pub id: RegionId,
     pub name: RegionName,
