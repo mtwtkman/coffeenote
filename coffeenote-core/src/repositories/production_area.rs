@@ -33,11 +33,8 @@ pub struct NewProductionArea {
 }
 
 impl NewProductionArea {
-    pub fn new(name: String, region: Region) -> Self {
-        Self {
-            name: ProductionAreaName::from(name),
-            region,
-        }
+    pub fn new(name: ProductionAreaName, region: Region) -> Self {
+        Self { name, region }
     }
 }
 

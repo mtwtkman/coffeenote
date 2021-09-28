@@ -1,4 +1,4 @@
-use crate::entities::{production_area::ProductionArea, region::Region};
+use crate::entities::{production_area::{ProductionAreaName, ProductionArea}, region::Region, Invalid, Validate};
 use crate::repositories::production_area::{
     CreateError, NewProductionArea, ProductionAreaRepository,
 };
@@ -6,6 +6,7 @@ use crate::repositories::production_area::{
 #[derive(Debug)]
 pub enum Error {
     CreatError(CreateError),
+    InvalidParameter(Invalid<<ProductionAreaName as Validate>::ValueType>),
 }
 
 pub struct Request {
@@ -27,7 +28,11 @@ impl<R: ProductionAreaRepository> CreateProductionArea<R> {
     }
 
     pub fn exec(&self, req: Request) -> Result<Response, Error> {
-        let param = NewProductionArea::new(req.name, req.region);
+        let name = ProductionAreaName::from(req.name);
+        if let Err(invalid) = name.validate() {
+            return Err(Error::InvalidParameter(invalid));
+        }
+        let param = NewProductionArea::new(name, req.region);
         self.repo
             .create(param)
             .map(|production_area| Response { production_area })

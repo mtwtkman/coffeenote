@@ -1,6 +1,6 @@
 use uuid::Uuid;
 
-use super::{region::Region, CoffeeNoteEntity, CoffeeNoteValueObject, Validate, Valid, Invalid};
+use super::{region::Region, CoffeeNoteEntity, CoffeeNoteValueObject, Validate, ValidationResult, Invalid, Valid};
 
 pub struct ProductionAreaId(Uuid);
 impl CoffeeNoteValueObject for ProductionAreaId {}
@@ -18,7 +18,7 @@ impl ProductionAreaName {
 }
 impl Validate for ProductionAreaName {
     type ValueType = String;
-    fn validate(&self) -> Result<Valid, Invalid<Self::ValueType>> {
+    fn validate(&self) -> ValidationResult<Self::ValueType> {
         let length = self.0.len();
         if length < Self::min_len() {
             return Err(Invalid(self.0.clone()))
