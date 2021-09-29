@@ -1,7 +1,10 @@
 use std::ops::Deref;
 use uuid::Uuid;
 
-use super::{region::Region, CoffeeNoteEntity, CoffeeNoteValueObject, Validate, ValidationResult, Invalid, Valid};
+use super::{
+    region::Region, CoffeeNoteEntity, CoffeeNoteValueObject, Invalid, Valid, Validate,
+    ValidationResult,
+};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ProductionAreaId(Uuid);
@@ -16,19 +19,23 @@ impl From<Uuid> for ProductionAreaId {
 pub struct ProductionAreaName(String);
 impl CoffeeNoteValueObject for ProductionAreaName {}
 impl ProductionAreaName {
-    const fn min_len() -> usize { 1 }
-    const fn max_len() -> usize { 256 }
+    const fn min_len() -> usize {
+        1
+    }
+    const fn max_len() -> usize {
+        256
+    }
 }
 impl Validate for ProductionAreaName {
     type ValueType = String;
     fn validate(&self) -> ValidationResult<Self::ValueType> {
         let length = self.0.len();
         if length < Self::min_len() {
-            return Err(Invalid(self.0.clone()))
+            return Err(Invalid(self.0.clone()));
         } else if length > Self::max_len() {
-            return Err(Invalid(self.0.clone()))
+            return Err(Invalid(self.0.clone()));
         }
-        return Ok(Valid)
+        return Ok(Valid);
     }
 }
 impl From<String> for ProductionAreaName {

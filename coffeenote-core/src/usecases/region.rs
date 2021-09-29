@@ -1,10 +1,9 @@
-use std::sync::Arc;
 use crate::entities::{
-    region::{RegionName, Region},
-    Validate,
-    Invalid,
+    region::{Region, RegionName},
+    Invalid, Validate,
 };
-use crate::repositories::region::{NewRegion, RegionRepository, CreateError};
+use crate::repositories::region::{CreateError, NewRegion, RegionRepository};
+use std::sync::Arc;
 
 #[derive(Debug)]
 pub enum Error {
@@ -30,9 +29,8 @@ pub struct CreateRegion {
     pub repo: Arc<dyn RegionRepository>,
 }
 
-
 impl CreateRegion {
-    pub fn new(repo: Arc<dyn RegionRepository>)  -> Self {
+    pub fn new(repo: Arc<dyn RegionRepository>) -> Self {
         Self { repo }
     }
 
@@ -42,8 +40,7 @@ impl CreateRegion {
             return Err(Error::InvalidParameter(invalid));
         }
         let param = NewRegion::new(req.name);
-        self
-            .repo
+        self.repo
             .create(param)
             .await
             .map(|region| Response { region })
@@ -53,9 +50,9 @@ impl CreateRegion {
 
 #[cfg(test)]
 mod tests {
-    use std::sync::Arc;
-    use super::{Request,Response, CreateRegion};
+    use super::{CreateRegion, Request, Response};
     use crate::tests::harness::in_memory_repositories::region::InMemory;
+    use std::sync::Arc;
 
     #[tokio::test]
     async fn it_should_create_new_one() {
@@ -66,9 +63,8 @@ mod tests {
         match usecase.execute(req).await {
             Ok(Response { region }) => {
                 assert_eq!(&*region.name, name);
-            },
+            }
             Err(_) => unreachable!(),
         };
-
     }
 }

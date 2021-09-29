@@ -1,6 +1,6 @@
+use super::{CoffeeNoteEntity, CoffeeNoteValueObject, Invalid, Valid, Validate, ValidationResult};
 use std::ops::Deref;
 use uuid::Uuid;
-use super::{CoffeeNoteEntity, CoffeeNoteValueObject, ValidationResult, Validate, Invalid, Valid};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RegionId(Uuid);
@@ -20,8 +20,12 @@ impl From<String> for RegionName {
     }
 }
 impl RegionName {
-    const fn max_length() -> usize { 256 }
-    const fn min_length() -> usize { 1 }
+    const fn max_length() -> usize {
+        256
+    }
+    const fn min_length() -> usize {
+        1
+    }
 }
 impl Validate for RegionName {
     type ValueType = String;
@@ -32,7 +36,7 @@ impl Validate for RegionName {
         } else if length > Self::max_length() {
             return Err(Invalid(self.0.clone()));
         }
-        return Ok(Valid)
+        return Ok(Valid);
     }
 }
 impl Deref for RegionName {

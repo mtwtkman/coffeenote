@@ -6,7 +6,6 @@ pub mod shop;
 pub trait CoffeeNoteEntity {}
 pub trait CoffeeNoteValueObject {}
 
-
 #[derive(Debug)]
 pub struct Invalid<T>(T);
 

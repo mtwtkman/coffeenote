@@ -1,7 +1,10 @@
-use futures::lock::Mutex;
-use async_trait::async_trait;
-use crate::repositories::production_area::{CreateError, DeleteError, FetchAllError, FetchOneError, NewProductionArea, ProductionAreaRepository};
 use crate::entities::production_area::{ProductionArea, ProductionAreaId};
+use crate::repositories::production_area::{
+    CreateError, DeleteError, FetchAllError, FetchOneError, NewProductionArea,
+    ProductionAreaRepository,
+};
+use async_trait::async_trait;
+use futures::lock::Mutex;
 
 pub struct InMemory {
     production_areas: Mutex<Vec<ProductionArea>>,
@@ -10,7 +13,10 @@ pub struct InMemory {
 
 impl InMemory {
     fn new(production_areas: Vec<ProductionArea>, error: bool) -> Self {
-        Self { production_areas: Mutex::new(production_areas), error }
+        Self {
+            production_areas: Mutex::new(production_areas),
+            error,
+        }
     }
 }
 
@@ -49,7 +55,10 @@ impl ProductionAreaRepository for InMemory {
         Ok(new_one)
     }
 
-    async fn delete(&self, id: ProductionAreaId) -> Result<(), crate::repositories::production_area::DeleteError> {
+    async fn delete(
+        &self,
+        id: ProductionAreaId,
+    ) -> Result<(), crate::repositories::production_area::DeleteError> {
         if self.error {
             return Err(DeleteError::Unknown);
         }

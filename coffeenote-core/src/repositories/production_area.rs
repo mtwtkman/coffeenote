@@ -1,8 +1,8 @@
-use async_trait::async_trait;
 use crate::entities::{
     production_area::{ProductionArea, ProductionAreaId},
     region::Region,
 };
+use async_trait::async_trait;
 
 #[derive(Debug)]
 pub enum FetchOneError {

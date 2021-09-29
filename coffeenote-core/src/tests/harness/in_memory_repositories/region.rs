@@ -1,7 +1,9 @@
+use crate::entities::region::{Region, RegionId};
+use crate::repositories::region::{
+    CreateError, DeleteError, FetchAllError, FetchOneError, NewRegion, RegionRepository,
+};
 use async_trait::async_trait;
 use futures::lock::Mutex;
-use crate::entities::region::{Region, RegionId};
-use crate::repositories::region::{RegionRepository, CreateError, FetchAllError, FetchOneError, DeleteError, NewRegion};
 
 pub struct InMemory {
     regions: Mutex<Vec<Region>>,
@@ -10,7 +12,10 @@ pub struct InMemory {
 
 impl InMemory {
     pub fn new(regions: Vec<Region>, error: bool) -> Self {
-        Self { regions: Mutex::new(regions), error }
+        Self {
+            regions: Mutex::new(regions),
+            error,
+        }
     }
 }
 

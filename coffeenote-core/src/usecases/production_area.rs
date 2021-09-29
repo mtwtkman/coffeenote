@@ -1,4 +1,8 @@
-use crate::entities::{production_area::{ProductionAreaName, ProductionArea}, region::Region, Invalid, Validate};
+use crate::entities::{
+    production_area::{ProductionArea, ProductionAreaName},
+    region::Region,
+    Invalid, Validate,
+};
 use crate::repositories::production_area::{
     CreateError, NewProductionArea, ProductionAreaRepository,
 };
@@ -32,7 +36,7 @@ impl<R: ProductionAreaRepository> CreateProductionArea<R> {
         if let Err(invalid) = name.validate() {
             return Err(Error::InvalidParameter(invalid));
         }
-        let param = NewProductionArea::new(req.name, req.region);  // TODO: I must decide that req.name should be ProductionAreaName or not.
+        let param = NewProductionArea::new(req.name, req.region); // TODO: I must decide that req.name should be ProductionAreaName or not.
         self.repo
             .create(param)
             .await
