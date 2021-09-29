@@ -149,6 +149,7 @@ dependencies = [
  "chrono",
  "futures",
  "quickcheck",
+ "tokio",
  "uuid",
 ]
 

@@ -1,3 +1,4 @@
+use async_trait::async_trait;
 use crate::entities::region::{Region, RegionId, RegionName};
 
 #[derive(Debug)]
@@ -23,21 +24,20 @@ pub enum DeleteError {
     NotFound,
 }
 
-pub struct CreateRegion {
-    name: RegionName,
+pub struct NewRegion {
+    pub name: String,
 }
 
-impl CreateRegion {
+impl NewRegion {
     pub fn new(name: String) -> Self {
-        Self {
-            name: RegionName::from(name),
-        }
+        Self { name }
     }
 }
 
+#[async_trait]
 pub trait RegionRepository {
-    fn fetch_one(&self, id: RegionId) -> Result<Region, FetchOneError>;
-    fn fetch_all(&self) -> Result<Vec<Region>, FetchAllError>;
-    fn create(&self, value: CreateRegion) -> Result<Region, CreateError>;
-    fn delete(&self, id: RegionId) -> Result<(), DeleteError>;
+    async fn fetch_one(&self, id: RegionId) -> Result<Region, FetchOneError>;
+    async fn fetch_all(&self) -> Result<Vec<Region>, FetchAllError>;
+    async fn create(&self, value: NewRegion) -> Result<Region, CreateError>;
+    async fn delete(&self, id: RegionId) -> Result<(), DeleteError>;
 }
