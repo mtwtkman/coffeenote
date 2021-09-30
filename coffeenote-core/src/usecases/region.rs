@@ -50,8 +50,11 @@ impl CreateRegion {
 
 #[cfg(test)]
 mod tests {
-    use super::{CreateRegion, Request, Response};
-    use crate::tests::harness::in_memory_repositories::region::InMemory;
+    use super::{CreateRegion, Request, Response, Error, CreateError};
+    use crate::{
+        tests::harness::in_memory_repositories::region::InMemory,
+        entities::region::Region,
+    };
     use std::sync::Arc;
 
     #[tokio::test]
@@ -65,6 +68,30 @@ mod tests {
                 assert_eq!(&*region.name, name);
             }
             Err(_) => unreachable!(),
+        };
+    }
+
+    #[tokio::test]
+    async fn it_should_fail_by_duplicated_name() {
+        let name = "xxx";
+        let one = Region::new(name);
+        let repo = InMemory::new(vec![one.clone()], false);
+        let usecase = CreateRegion::new(Arc::new(repo));
+        let req = Request::new(name);
+        match usecase.execute(req).await {
+            Err(Error::CreateError(CreateError::DuplicatedName)) => true,
+            _ => unreachable!(),
+        };
+    }
+
+    #[tokio::test]
+    async fn it_should_fail_by_an_unknown_error() {
+        let repo = InMemory::new(vec![], true);
+        let usecase = CreateRegion::new(Arc::new(repo));
+        let req = Request::new("x");
+        match usecase.execute(req).await {
+            Err(Error::CreateError(CreateError::Unknown)) => true,
+            _ => unreachable!(),
         };
     }
 }

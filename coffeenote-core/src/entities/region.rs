@@ -14,9 +14,10 @@ impl From<Uuid> for RegionId {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RegionName(String);
 impl CoffeeNoteValueObject for RegionName {}
-impl From<String> for RegionName {
-    fn from(v: String) -> Self {
-        Self(v)
+impl<S> From<S> for RegionName
+where S: Into<String> {
+    fn from(v: S) -> Self {
+        Self(v.into())
     }
 }
 impl RegionName {
@@ -53,7 +54,7 @@ pub struct Region {
 }
 impl CoffeeNoteEntity for Region {}
 impl Region {
-    pub fn new(name: String) -> Self {
+    pub fn new<S: Into<String>>(name: S) -> Self {
         let id = Uuid::new_v4();
         Self {
             id: RegionId::from(id),
