@@ -1,5 +1,8 @@
 pub mod entities;
 pub mod repositories;
+pub mod usecases;
 #[cfg(test)]
 mod tests;
-pub mod usecases;
+#[cfg(test)]
+#[macro_use]
+extern crate quickcheck_macros;

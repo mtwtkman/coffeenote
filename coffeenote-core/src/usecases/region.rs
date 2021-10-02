@@ -34,7 +34,7 @@ impl CreateRegion {
         Self { repo }
     }
 
-    pub async fn execute(&self, req: Request) -> Result<Response, Error> {
+    pub fn execute(&self, req: Request) -> Result<Response, Error> {
         let name = RegionName::from(req.name.clone());
         if let Err(invalid) = name.validate() {
             return Err(Error::InvalidParameter(invalid));
@@ -42,7 +42,6 @@ impl CreateRegion {
         let param = NewRegion::new(req.name);
         self.repo
             .create(param)
-            .await
             .map(|region| Response { region })
             .map_err(Error::CreateError)
     }
@@ -57,13 +56,13 @@ mod tests {
     };
     use std::sync::Arc;
 
-    #[tokio::test]
-    async fn it_should_create_new_one() {
+    #[test]
+    fn it_should_create_new_one() {
         let repo = InMemory::new(vec![], false);
         let usecase = CreateRegion::new(Arc::new(repo));
         let name = "xxx";
         let req = Request::new(name);
-        match usecase.execute(req).await {
+        match usecase.execute(req) {
             Ok(Response { region }) => {
                 assert_eq!(&*region.name, name);
             }
@@ -71,25 +70,25 @@ mod tests {
         };
     }
 
-    #[tokio::test]
-    async fn it_should_fail_by_duplicated_name() {
+    #[test]
+    fn it_should_fail_by_duplicated_name() {
         let name = "xxx";
         let one = Region::new(name);
         let repo = InMemory::new(vec![one.clone()], false);
         let usecase = CreateRegion::new(Arc::new(repo));
         let req = Request::new(name);
-        match usecase.execute(req).await {
+        match usecase.execute(req) {
             Err(Error::CreateError(CreateError::DuplicatedName)) => true,
             _ => unreachable!(),
         };
     }
 
-    #[tokio::test]
-    async fn it_should_fail_by_an_unknown_error() {
+    #[test]
+    fn it_should_fail_by_an_unknown_error() {
         let repo = InMemory::new(vec![], true);
         let usecase = CreateRegion::new(Arc::new(repo));
         let req = Request::new("x");
-        match usecase.execute(req).await {
+        match usecase.execute(req) {
             Err(Error::CreateError(CreateError::Unknown)) => true,
             _ => unreachable!(),
         };
