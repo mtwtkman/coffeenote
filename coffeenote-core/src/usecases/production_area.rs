@@ -36,7 +36,7 @@ impl<R: ProductionAreaRepository> CreateProductionArea<R> {
         if let Err(invalid) = name.validate() {
             return Err(Error::InvalidParameter(invalid));
         }
-        let param = NewProductionArea::new(req.name, req.region); // TODO: I must decide that req.name should be ProductionAreaName or not.
+        let param = NewProductionArea::new(req.name, req.region);
         self.repo
             .create(param)
             .map(|production_area| Response { production_area })

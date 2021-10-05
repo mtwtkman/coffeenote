@@ -4,10 +4,11 @@ use crate::entities::{
 };
 use crate::repositories::region::{CreateError, NewRegion, RegionRepository};
 use std::sync::Arc;
+use crate::usecases::Usecase;
 
 #[derive(Debug)]
 pub enum Error {
-    CreateError(CreateError),
+    RepositoryError(CreateError),
     InvalidParameter(Invalid<<RegionName as Validate>::ValueType>),
 }
 
@@ -33,8 +34,14 @@ impl CreateRegion {
     pub fn new(repo: Arc<dyn RegionRepository>) -> Self {
         Self { repo }
     }
+}
 
-    pub fn execute(&self, req: Request) -> Result<Response, Error> {
+impl Usecase for CreateRegion {
+    type Request = Request;
+    type Response = Response;
+    type Error = Error;
+
+    fn execute(&self, req: Self::Request) -> Result<Self::Response, Self::Error> {
         let name = RegionName::from(req.name.clone());
         if let Err(invalid) = name.validate() {
             return Err(Error::InvalidParameter(invalid));
@@ -43,13 +50,20 @@ impl CreateRegion {
         self.repo
             .create(param)
             .map(|region| Response { region })
-            .map_err(Error::CreateError)
+            .map_err(Error::RepositoryError)
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{CreateRegion, Request, Response, Error, CreateError};
+    use super::{
+        CreateRegion,
+        Request,
+        Response,
+        Error,
+        Usecase,
+        CreateError,
+    };
     use crate::{
         tests::harness::in_memory_repositories::region::InMemory,
         entities::region::Region,
@@ -78,7 +92,7 @@ mod tests {
         let usecase = CreateRegion::new(Arc::new(repo));
         let req = Request::new(name);
         match usecase.execute(req) {
-            Err(Error::CreateError(CreateError::DuplicatedName)) => true,
+            Err(Error::RepositoryError(CreateError::DuplicatedName)) => true,
             _ => unreachable!(),
         };
     }
@@ -89,7 +103,7 @@ mod tests {
         let usecase = CreateRegion::new(Arc::new(repo));
         let req = Request::new("x");
         match usecase.execute(req) {
-            Err(Error::CreateError(CreateError::Unknown)) => true,
+            Err(Error::RepositoryError(CreateError::Unknown)) => true,
             _ => unreachable!(),
         };
     }
