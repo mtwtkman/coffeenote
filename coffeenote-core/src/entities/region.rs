@@ -3,16 +3,18 @@ use std::ops::Deref;
 use uuid::Uuid;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct RegionId(Uuid);
+pub struct RegionId(pub(crate) Uuid);
 impl CoffeeNoteValueObject for RegionId {}
 impl From<Uuid> for RegionId {
     fn from(v: Uuid) -> Self {
         Self(v)
     }
 }
-impl Into<String> for RegionId {
-    fn into(self) -> String {
-        self.0.to_string()
+impl Deref for RegionId {
+    type Target = Uuid;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
     }
 }
 
