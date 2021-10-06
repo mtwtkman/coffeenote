@@ -10,6 +10,11 @@ impl From<Uuid> for RegionId {
         Self(v)
     }
 }
+impl Into<String> for RegionId {
+    fn into(self) -> String {
+        self.0.to_string()
+    }
+}
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RegionName(String);

@@ -5,7 +5,7 @@ use crate::repositories::region::{
 };
 
 pub struct InMemory {
-    regions: Mutex<Vec<Region>>,
+    pub regions: Mutex<Vec<Region>>,
     error: bool,
 }
 

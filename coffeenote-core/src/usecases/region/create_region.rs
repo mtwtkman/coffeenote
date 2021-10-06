@@ -72,13 +72,15 @@ mod tests {
 
     #[test]
     fn it_should_create_new_one() {
-        let repo = InMemory::new(vec![], false);
-        let usecase = CreateRegion::new(Arc::new(repo));
+        let repo = Arc::new(InMemory::new(vec![], false));
+        let usecase = CreateRegion::new(repo.clone());
         let name = "xxx";
         let req = Request::new(name);
         match usecase.execute(req) {
             Ok(Response { region }) => {
                 assert_eq!(&*region.name, name);
+                let regions = repo.regions.lock().unwrap();
+                assert_eq!(regions.to_owned(), vec![region]);
             }
             Err(_) => unreachable!(),
         };
