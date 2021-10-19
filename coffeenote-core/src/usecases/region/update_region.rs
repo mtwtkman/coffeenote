@@ -121,4 +121,17 @@ mod tests {
             _ => unreachable!(),
         };
     }
+
+    #[test]
+    fn it_should_process_normaly_with_no_modifying() {
+        let region = Region::new("xxx");
+        let repo = InMemory::new(vec![region.clone()], false);
+        let update_region = UpdateRegion::new(Arc::new(repo));
+        let cloned = region.clone();
+        let req = Request::new(*cloned.id, (*cloned.name).clone());
+        match update_region.execute(req) {
+            Ok(_) => (),
+            _ => unreachable!(),
+        };
+    }
 }
