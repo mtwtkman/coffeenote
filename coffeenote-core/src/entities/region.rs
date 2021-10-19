@@ -19,7 +19,7 @@ impl Deref for RegionId {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct RegionName(String);
+pub struct RegionName(pub(crate) String);
 impl CoffeeNoteValueObject for RegionName {}
 impl<S> From<S> for RegionName
 where S: Into<String> {

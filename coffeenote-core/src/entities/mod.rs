@@ -1,7 +1,9 @@
+use chrono::{DateTime, Utc};
 pub mod bean;
 pub mod production_area;
 pub mod region;
 pub mod shop;
+pub mod roast;
 
 pub trait CoffeeNoteEntity {}
 pub trait CoffeeNoteValueObject {}
@@ -21,3 +23,5 @@ pub trait Validate {
         self.validate().is_ok()
     }
 }
+
+pub(self) type Datetime = DateTime<Utc>;

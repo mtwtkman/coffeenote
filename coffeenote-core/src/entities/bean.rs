@@ -1,7 +1,6 @@
-use chrono::{DateTime, Utc};
 use uuid::Uuid;
 
-use super::{production_area::ProductionArea, shop::Shop, CoffeeNoteEntity, CoffeeNoteValueObject};
+use super::{production_area::ProductionArea, shop::Shop, CoffeeNoteEntity, CoffeeNoteValueObject, Datetime};
 
 pub struct BeanId(Uuid);
 impl CoffeeNoteValueObject for BeanId {}
@@ -21,10 +20,10 @@ impl From<String> for BeanName {
 }
 
 #[derive(Debug)]
-pub struct BeanPurchasedAt(DateTime<Utc>);
+pub struct BeanPurchasedAt(Datetime);
 impl CoffeeNoteValueObject for BeanPurchasedAt {}
-impl From<DateTime<Utc>> for BeanPurchasedAt {
-    fn from(v: DateTime<Utc>) -> Self {
+impl From<Datetime> for BeanPurchasedAt {
+    fn from(v: Datetime) -> Self {
         Self(v)
     }
 }
@@ -42,7 +41,7 @@ impl Bean {
         name: String,
         shop: Shop,
         production_area: ProductionArea,
-        purchased_at: DateTime<Utc>,
+        purchased_at: Datetime,
     ) -> Self {
         let id = Uuid::new_v4();
         Self {

@@ -2,6 +2,7 @@ use std::sync::Mutex;
 use crate::entities::region::{Region, RegionId};
 use crate::repositories::region::{
     CreateError, DeleteError, FetchAllError, FetchOneError, NewRegion, RegionRepository,
+    UpdateError,
 };
 
 pub struct InMemory {
@@ -34,6 +35,7 @@ impl RegionRepository for InMemory {
                 }
             })
     }
+
     fn fetch_all(&self) -> Result<Vec<Region>, FetchAllError> {
         if self.error {
             return Err(FetchAllError::Unknown);
@@ -43,6 +45,7 @@ impl RegionRepository for InMemory {
             .or(Err(FetchAllError::Unknown))
             .map(|locked| locked.clone())
     }
+
     fn create(&self, value: NewRegion) -> Result<Region, CreateError> {
         if self.error {
             return Err(CreateError::Unknown);
@@ -59,6 +62,7 @@ impl RegionRepository for InMemory {
                 Ok(new_one)
             })
     }
+
     fn delete(&self, id: RegionId) -> Result<(), DeleteError> {
         if self.error {
             return Err(DeleteError::Unknown);
@@ -72,6 +76,27 @@ impl RegionRepository for InMemory {
                     Ok(())
                 } else {
                     Err(DeleteError::NotFound)
+                }
+            })
+    }
+
+    fn update(&self, id: RegionId, name: crate::entities::region::RegionName) -> Result<(), UpdateError> {
+        if self.error {
+            return Err(UpdateError::Unknown);
+        }
+        self.regions
+            .lock()
+            .or(Err(UpdateError::Unknown))
+            .and_then(|mut locked| {
+                if let Some(index) = locked.iter().position(|v| &v.id == &id) {
+                    let updated = Region { id, name };
+                    if locked.iter().find(|v| &v.id != &updated.id && &v.name == &updated.name).is_some() {
+                        return Err(UpdateError::DuplicatedName);
+                    }
+                    locked.splice(index..index+1, vec![updated]);
+                    Ok(())
+                } else {
+                    Err(UpdateError::NotFound)
                 }
             })
     }
