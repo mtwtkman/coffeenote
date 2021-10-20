@@ -6,7 +6,7 @@ use crate::{
     entities::region::{Region, RegionId},
 };
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum Error {
     InvalidId,
     RepositoryError(FetchOneByRegionIdError),
@@ -15,6 +15,8 @@ pub enum Error {
 pub struct Request {
     id: Uuid,
 }
+
+#[derive(PartialEq, Eq, Debug)]
 pub struct Response {
     region: Option<Region>,
 }
@@ -46,9 +48,15 @@ impl Usecase for FetchOneByRegionId {
 
 #[cfg(test)]
 mod tests {
+    use uuid::Uuid;
     use std::sync::Arc;
-    use super::{FetchOneByRegionId, Request, Response};
-    use crate::{entities::region::Region, tests::harness::in_memory_repositories::region::InMemory, usecases::Usecase};
+    use super::{FetchOneByRegionId, Request, Response, Error};
+    use crate::{
+        entities::region::Region,
+        tests::harness::in_memory_repositories::region::InMemory,
+        usecases::Usecase,
+        repositories::region::FetchOneByRegionIdError,
+    };
 
     #[test]
     fn it_should_fetch_one_region_by_its_id() {
@@ -60,5 +68,26 @@ mod tests {
             Ok(Response { region: fetched }) => assert_eq!(fetched, Some(region)),
             _ => unreachable!(),
         }
+    }
+
+    #[test]
+    fn it_should_none_by_not_found() {
+        let region = Region::new("xxx");
+        let repo = InMemory::new(vec![region.clone()], false);
+        let fetch_one_by_region_id = FetchOneByRegionId::new(Arc::new(repo));
+        let req = Request { id: Uuid::new_v4()};
+        match fetch_one_by_region_id.execute(req) {
+            Ok(Response { region: None }) => (),
+            _ => unreachable!(),
+        };
+    }
+
+    #[test]
+    fn it_should_happen_an_error_by_repository_issue() {
+        let region = Region::new("xxx");
+        let repo = InMemory::new(vec![region.clone()], true);
+        let fetch_one_by_region_id = FetchOneByRegionId::new(Arc::new(repo));
+        let req = Request { id: *region.id};
+        assert_eq!(fetch_one_by_region_id.execute(req), Err(Error::RepositoryError(FetchOneByRegionIdError::Unknown)));
     }
 }

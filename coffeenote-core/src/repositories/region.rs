@@ -1,6 +1,6 @@
 use crate::entities::region::{Region, RegionId, RegionName};
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum FetchOneByRegionIdError {
     Unknown,
     NotFound,
