@@ -1,7 +1,7 @@
 use std::sync::Mutex;
 use crate::entities::region::{Region, RegionId};
 use crate::repositories::region::{
-    CreateError, DeleteError, FetchAllError, FetchOneError, NewRegion, RegionRepository,
+    CreateError, DeleteError, FetchAllError, FetchOneByRegionIdError, NewRegion, RegionRepository,
     UpdateError,
 };
 
@@ -20,18 +20,18 @@ impl InMemory {
 }
 
 impl RegionRepository for InMemory {
-    fn fetch_one(&self, id: RegionId) -> Result<Region, FetchOneError> {
+    fn fetch_one_by_region_id(&self, id: RegionId) -> Result<Region, FetchOneByRegionIdError> {
         if self.error {
-            return Err(FetchOneError::Unknown);
+            return Err(FetchOneByRegionIdError::Unknown);
         }
         self.regions
             .lock()
-            .or(Err(FetchOneError::Unknown))
+            .or(Err(FetchOneByRegionIdError::Unknown))
             .and_then(|locked| {
                 if let Some(v) = locked.iter().find(|v| &v.id == &id) {
                     Ok(v.clone())
                 } else {
-                    Err(FetchOneError::NotFound)
+                    Err(FetchOneByRegionIdError::NotFound)
                 }
             })
     }

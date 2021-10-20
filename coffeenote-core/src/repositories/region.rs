@@ -1,7 +1,7 @@
 use crate::entities::region::{Region, RegionId, RegionName};
 
 #[derive(Debug)]
-pub enum FetchOneError {
+pub enum FetchOneByRegionIdError {
     Unknown,
     NotFound,
 }
@@ -41,7 +41,7 @@ impl NewRegion {
 }
 
 pub trait RegionRepository {
-    fn fetch_one(&self, id: RegionId) -> Result<Region, FetchOneError>;
+    fn fetch_one_by_region_id(&self, id: RegionId) -> Result<Region, FetchOneByRegionIdError>;
     fn fetch_all(&self) -> Result<Vec<Region>, FetchAllError>;
     fn create(&self, value: NewRegion) -> Result<Region, CreateError>;
     fn delete(&self, id: RegionId) -> Result<(), DeleteError>;

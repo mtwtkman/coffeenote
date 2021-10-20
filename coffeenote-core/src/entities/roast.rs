@@ -1,5 +1,4 @@
 use uuid::Uuid;
-use chrono::{DateTime, Utc};
 use super::{
     CoffeeNoteEntity,
     Datetime,
