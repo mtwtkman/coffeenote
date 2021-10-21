@@ -23,23 +23,20 @@ pub enum DeleteError {
     NotFound,
 }
 
-pub struct CreateShop {
-    name: ShopName,
-    url: ShopUrl,
+pub struct NewShop {
+    name: String,
+    url: String,
 }
 
-impl CreateShop {
+impl NewShop {
     pub fn new(name: String, url: String) -> Self {
-        Self {
-            name: ShopName::from(name),
-            url: ShopUrl::from(url),
-        }
+        Self { name, url }
     }
 }
 
 pub trait ShopRepository {
     fn fetch_one(&self, id: ShopId) -> Result<Shop, FetchOneError>;
     fn fetch_all(&self) -> Result<Vec<Shop>, FetchAllError>;
-    fn create(&self, value: CreateShop) -> Result<Shop, CreateError>;
+    fn create(&self, value: NewShop) -> Result<Shop, CreateError>;
     fn delete(&self, id: ShopId) -> Result<(), DeleteError>;
 }
