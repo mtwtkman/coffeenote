@@ -30,13 +30,13 @@ pub enum Degree {
     Spanish,
 }
 
-pub struct RoastId(Uuid);
+pub struct RoastingId(Uuid);
 pub struct RoastedAt(Datetime);
 pub struct FirstCrackedSeconds(usize);
 pub struct SecondCrackedSeconds(usize);
 
-pub struct Roast {
-    pub id: RoastId,
+pub struct Roasting {
+    pub id: RoastingId,
     pub bean: Bean,
     pub roasted_at: RoastedAt,
     pub first_cracked_seconds: FirstCrackedSeconds,
