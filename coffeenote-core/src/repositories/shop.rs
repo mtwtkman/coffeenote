@@ -1,4 +1,4 @@
-use crate::entities::shop::{Shop, ShopId, ShopName, ShopUrl};
+use crate::entities::shop::{Shop, ShopId};
 
 #[derive(Debug)]
 pub enum FetchOneError {
@@ -24,8 +24,8 @@ pub enum DeleteError {
 }
 
 pub struct NewShop {
-    name: String,
-    url: String,
+    pub name: String,
+    pub url: String,
 }
 
 impl NewShop {

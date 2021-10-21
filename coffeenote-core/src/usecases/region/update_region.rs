@@ -1,12 +1,11 @@
+use crate::entities::{
+    region::{RegionId, RegionName},
+    Invalid, Validate,
+};
+use crate::repositories::region::{RegionRepository, UpdateError};
+use crate::usecases::Usecase;
 use std::sync::Arc;
 use uuid::Uuid;
-use crate::usecases::Usecase;
-use crate::repositories::region::{UpdateError, RegionRepository};
-use crate::entities::{
-    region::{RegionName, RegionId},
-    Invalid,
-    Validate,
-};
 
 #[derive(Debug)]
 pub enum Error {
@@ -49,10 +48,7 @@ impl Usecase for UpdateRegion {
             return Err(Error::InvalidName(invalid));
         }
         self.repo
-            .update(
-                RegionId::from(req.id),
-                name,
-            )
+            .update(RegionId::from(req.id), name)
             .map_err(Error::RepositoryError)
             .map(|_| Response::Ok)
     }
@@ -60,14 +56,17 @@ impl Usecase for UpdateRegion {
 
 #[cfg(test)]
 mod tests {
-    use std::sync::Arc;
-    use crate::entities::region::{RegionName, Region};
+    use super::{Error, Request, Response, UpdateError, UpdateRegion, Usecase};
+    use crate::entities::region::{Region, RegionName};
     use crate::tests::harness::in_memory_repositories::region::InMemory;
-    use super::{Usecase, UpdateRegion, Request, Response, UpdateError, Error};
+    use std::sync::Arc;
 
     #[test]
     fn it_should_update() {
-        let regions = ["xxx", "yyy"].iter().map(|name| Region::new(*name)).collect::<Vec<Region>>();
+        let regions = ["xxx", "yyy"]
+            .iter()
+            .map(|name| Region::new(*name))
+            .collect::<Vec<Region>>();
         let repo = Arc::new(InMemory::new(regions.clone(), false));
         let target_index = 0;
         let target = (regions.clone())[target_index].clone();
@@ -78,8 +77,17 @@ mod tests {
             Ok(Response::Ok) => {
                 let updated = repo.regions.lock().unwrap();
                 let not_updated = &regions.clone()[1];
-                assert_eq!(vec![Region { id: target.id.clone(), name: RegionName::from(new_name.clone()) }, not_updated.to_owned()], updated.to_owned());
-            },
+                assert_eq!(
+                    vec![
+                        Region {
+                            id: target.id.clone(),
+                            name: RegionName::from(new_name.clone())
+                        },
+                        not_updated.to_owned()
+                    ],
+                    updated.to_owned()
+                );
+            }
             _ => unreachable!(),
         };
     }
@@ -110,7 +118,10 @@ mod tests {
 
     #[test]
     fn it_should_happen_error_by_different_id_but_duplicated_name_error() {
-        let regions = ["xxx", "yyy"].iter().map(|name| Region::new(*name)).collect::<Vec<Region>>();
+        let regions = ["xxx", "yyy"]
+            .iter()
+            .map(|name| Region::new(*name))
+            .collect::<Vec<Region>>();
         let repo = InMemory::new(regions.clone(), false);
         let update_region = UpdateRegion::new(Arc::new(repo));
         let target = regions[0].clone();

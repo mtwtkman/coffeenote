@@ -1,8 +1,8 @@
+use crate::entities::region::RegionId;
+use crate::repositories::region::{DeleteError, RegionRepository};
+use crate::usecases::Usecase;
 use std::sync::Arc;
 use uuid::Uuid;
-use crate::usecases::Usecase;
-use crate::repositories::region::{DeleteError, RegionRepository};
-use crate::entities::region::RegionId;
 
 #[derive(Debug)]
 pub enum Error {
@@ -40,23 +40,29 @@ impl Usecase for DeleteRegion {
 
     fn execute(&self, req: Self::Request) -> Result<Self::Response, Self::Error> {
         let region_id = RegionId(req.id);
-        self.repo.delete(region_id).map(|_| Response::Ok).map_err(Error::RepositoryError)
+        self.repo
+            .delete(region_id)
+            .map(|_| Response::Ok)
+            .map_err(Error::RepositoryError)
     }
 }
 
 #[cfg(test)]
 mod tests {
+    use super::{DeleteRegion, Error, Request};
+    use crate::entities::region::Region;
+    use crate::repositories::region::DeleteError;
+    use crate::tests::harness::in_memory_repositories::region::InMemory;
+    use crate::usecases::Usecase;
     use std::sync::Arc;
     use uuid::Uuid;
-    use crate::tests::harness::in_memory_repositories::region::InMemory;
-    use crate::entities::region::Region;
-    use crate::usecases::Usecase;
-    use crate::repositories::region::DeleteError;
-    use super::{DeleteRegion, Request, Error};
 
     #[test]
     fn it_should_delete() {
-        let regions = ["xxx", "yyy"].iter().map(|name| Region::new(*name)).collect::<Vec<Region>>();
+        let regions = ["xxx", "yyy"]
+            .iter()
+            .map(|name| Region::new(*name))
+            .collect::<Vec<Region>>();
         let repo = Arc::new(InMemory::new(regions.clone(), false));
         let delete_region = DeleteRegion::new(repo.clone());
         let target = regions[0].clone();

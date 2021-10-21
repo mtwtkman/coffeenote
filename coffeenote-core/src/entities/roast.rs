@@ -1,10 +1,5 @@
+use super::{bean::Bean, CoffeeNoteEntity, Datetime};
 use uuid::Uuid;
-use super::{
-    CoffeeNoteEntity,
-    Datetime,
-    bean::Bean,
-};
-
 
 // degree of roast lineup. ref: https://goodsensecoffee.com/blogs/coffee_info/degree-of-roast
 #[derive(PartialEq, Eq, PartialOrd, Ord)]

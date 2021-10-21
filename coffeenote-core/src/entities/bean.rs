@@ -1,6 +1,8 @@
 use uuid::Uuid;
 
-use super::{production_area::ProductionArea, shop::Shop, CoffeeNoteEntity, CoffeeNoteValueObject, Datetime};
+use super::{
+    production_area::ProductionArea, shop::Shop, CoffeeNoteEntity, CoffeeNoteValueObject, Datetime,
+};
 
 pub struct BeanId(Uuid);
 impl CoffeeNoteValueObject for BeanId {}

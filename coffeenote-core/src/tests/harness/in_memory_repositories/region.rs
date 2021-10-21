@@ -1,9 +1,9 @@
-use std::sync::Mutex;
 use crate::entities::region::{Region, RegionId};
 use crate::repositories::region::{
     CreateError, DeleteError, FetchAllError, FetchOneByRegionIdError, NewRegion, RegionRepository,
     UpdateError,
 };
+use std::sync::Mutex;
 
 pub struct InMemory {
     pub regions: Mutex<Vec<Region>>,
@@ -80,7 +80,11 @@ impl RegionRepository for InMemory {
             })
     }
 
-    fn update(&self, id: RegionId, name: crate::entities::region::RegionName) -> Result<(), UpdateError> {
+    fn update(
+        &self,
+        id: RegionId,
+        name: crate::entities::region::RegionName,
+    ) -> Result<(), UpdateError> {
         if self.error {
             return Err(UpdateError::Unknown);
         }
@@ -90,10 +94,14 @@ impl RegionRepository for InMemory {
             .and_then(|mut locked| {
                 if let Some(index) = locked.iter().position(|v| &v.id == &id) {
                     let updated = Region { id, name };
-                    if locked.iter().find(|v| &v.id != &updated.id && &v.name == &updated.name).is_some() {
+                    if locked
+                        .iter()
+                        .find(|v| &v.id != &updated.id && &v.name == &updated.name)
+                        .is_some()
+                    {
                         return Err(UpdateError::DuplicatedName);
                     }
-                    locked.splice(index..index+1, vec![updated]);
+                    locked.splice(index..index + 1, vec![updated]);
                     Ok(())
                 } else {
                     Err(UpdateError::NotFound)

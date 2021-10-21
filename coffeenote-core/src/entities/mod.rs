@@ -2,8 +2,8 @@ use chrono::{DateTime, Utc};
 pub mod bean;
 pub mod production_area;
 pub mod region;
-pub mod shop;
 pub mod roast;
+pub mod shop;
 
 pub trait CoffeeNoteEntity {}
 pub trait CoffeeNoteValueObject {}

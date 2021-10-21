@@ -22,7 +22,9 @@ impl Deref for RegionId {
 pub struct RegionName(pub(crate) String);
 impl CoffeeNoteValueObject for RegionName {}
 impl<S> From<S> for RegionName
-where S: Into<String> {
+where
+    S: Into<String>,
+{
     fn from(v: S) -> Self {
         Self(v.into())
     }

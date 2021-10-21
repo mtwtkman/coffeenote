@@ -3,8 +3,8 @@ use crate::entities::{
     Invalid, Validate,
 };
 use crate::repositories::region::{CreateError, NewRegion, RegionRepository};
-use std::sync::Arc;
 use crate::usecases::Usecase;
+use std::sync::Arc;
 
 #[derive(Debug)]
 pub enum Error {
@@ -56,17 +56,9 @@ impl Usecase for CreateRegion {
 
 #[cfg(test)]
 mod tests {
-    use super::{
-        CreateRegion,
-        Request,
-        Response,
-        Error,
-        Usecase,
-        CreateError,
-    };
+    use super::{CreateError, CreateRegion, Error, Request, Response, Usecase};
     use crate::{
-        tests::harness::in_memory_repositories::region::InMemory,
-        entities::region::Region,
+        entities::region::Region, tests::harness::in_memory_repositories::region::InMemory,
     };
     use std::sync::Arc;
 
