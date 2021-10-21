@@ -4,7 +4,7 @@ use crate::entities::{
 };
 
 #[derive(Debug)]
-pub enum FetchOneError {
+pub enum FetchOneByIdError {
     Unknown,
     NotFound,
 }
@@ -38,7 +38,7 @@ impl NewProductionArea {
 }
 
 pub trait ProductionAreaRepository {
-    fn fetch_one(&self, id: ProductionAreaId) -> Result<ProductionArea, FetchOneError>;
+    fn fetch_one_by_id(&self, id: ProductionAreaId) -> Result<ProductionArea, FetchOneByIdError>;
     fn fetch_all(&self) -> Result<Vec<ProductionArea>, FetchAllError>;
     fn create(&self, value: NewProductionArea) -> Result<ProductionArea, CreateError>;
     fn delete(&self, id: ProductionAreaId) -> Result<(), DeleteError>;

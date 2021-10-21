@@ -1,6 +1,6 @@
 use crate::entities::production_area::{ProductionArea, ProductionAreaId};
 use crate::repositories::production_area::{
-    CreateError, DeleteError, FetchAllError, FetchOneError, NewProductionArea,
+    CreateError, DeleteError, FetchAllError, FetchOneByIdError, NewProductionArea,
     ProductionAreaRepository,
 };
 use std::sync::Mutex;
@@ -11,7 +11,7 @@ pub struct InMemory {
 }
 
 impl InMemory {
-    fn new(production_areas: Vec<ProductionArea>, error: bool) -> Self {
+    pub fn new(production_areas: Vec<ProductionArea>, error: bool) -> Self {
         Self {
             production_areas: Mutex::new(production_areas),
             error,
@@ -20,18 +20,18 @@ impl InMemory {
 }
 
 impl ProductionAreaRepository for InMemory {
-    fn fetch_one(&self, id: ProductionAreaId) -> Result<ProductionArea, FetchOneError> {
+    fn fetch_one_by_id(&self, id: ProductionAreaId) -> Result<ProductionArea, FetchOneByIdError> {
         if self.error {
-            return Err(FetchOneError::Unknown);
+            return Err(FetchOneByIdError::Unknown);
         }
         self.production_areas
             .lock()
-            .or(Err(FetchOneError::Unknown))
+            .or(Err(FetchOneByIdError::Unknown))
             .and_then(|locked| {
                 if let Some(v) = locked.iter().find(|v| &v.id == &id) {
                     Ok(v.clone())
                 } else {
-                    Err(FetchOneError::NotFound)
+                    Err(FetchOneByIdError::NotFound)
                 }
             })
     }
