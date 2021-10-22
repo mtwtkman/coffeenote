@@ -31,7 +31,7 @@ case $cmd in
         _do "$cmd"
         ;;
     sqlx) _run "api sqlx $@";;
-    migrate) ./x sqlx "migrate $@";;
+    migrate) ./x sqlx "migrate --source coffeenote-api/migrations $@";;
     exec) _exec "$@";;
     psql) _exec "db psql -d coffeenote -w -U user";;
     *) $cmd $@;;

@@ -29,6 +29,7 @@ pub struct RoastId(Uuid);
 pub struct RoastedAt(Datetime);
 pub struct FirstCrackedSeconds(usize);
 pub struct SecondCrackedSeconds(usize);
+pub struct Note(String);
 
 pub struct Roast {
     pub id: RoastId,
@@ -37,4 +38,5 @@ pub struct Roast {
     pub first_cracked_seconds: FirstCrackedSeconds,
     pub second_cracked_seconds: SecondCrackedSeconds,
     pub degree: Degree,
+    pub note: Note,
 }
