@@ -13,4 +13,4 @@ jobs:
       - uses: actions/checkout@v2
       - uses: /rust-action@master
         with:
-          CMD: "cargo test"
+          cmd: "cargo test"
