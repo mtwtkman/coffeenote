@@ -1,5 +1,7 @@
 name: run-test
 on: [push]
+env:
+  CARGO_TERM_COLOR: always
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -9,6 +11,6 @@ jobs:
         with:
           access_token: ${{ github.token }}
       - uses: actions/checkout@v2
-      - uses: mtwtkman/rust-action@master
-      - name: Run tests
-        run: cargo test
+      - uses: /rust-action@master
+        with:
+          CMD: "cargo test"
