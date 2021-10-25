@@ -11,5 +11,6 @@ jobs:
         with:
           access_token: ${{ github.token }}
       - uses: docker/build-push-action@v2
+        run: ./x build
       - name: Run test
         run: ./x t
