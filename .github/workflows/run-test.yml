@@ -15,4 +15,4 @@ jobs:
       - name: Build
         run: ./x build
       - name: Run test
-        run: ./x t
+        run: ./x run api cargo test

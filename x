@@ -40,6 +40,7 @@ case $cmd in
     sqlx) _run "api sqlx $@";;
     migrate) ./x sqlx "migrate --source coffeenote-api/migrations $@";;
     exec) _exec "$@";;
+    run) _run "$@";;
     psql) _exec "db psql -d coffeenote -w -U user";;
     test|t) _exec "api cargo test $@";;
     *) $cmd $@;;
