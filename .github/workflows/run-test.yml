@@ -11,7 +11,7 @@ jobs:
         with:
           access_token: ${{ github.token }}
       - uses: actions/checkout@v2
+      - name: Build the image
+        run: ./x build
       - name: Run test
-        uses: mtwtkman/rust-action@master
-        with:
-          cmd: "rustup component add rustfmt && cargo test"
+        run: ./x t
