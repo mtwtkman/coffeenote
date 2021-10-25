@@ -2,6 +2,7 @@ name: run-test
 on: [push]
 env:
   CARGO_TERM_COLOR: always
+  DOCKER_BUILDKIT: 1
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -11,13 +12,7 @@ jobs:
         with:
           access_token: ${{ github.token }}
       - uses: actions/checkout@v2
-      - uses: docker/setup-buildx-action@v1
-      - uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
+      - uses:
       - name: Build
         run: ./x build
       - name: Run test
