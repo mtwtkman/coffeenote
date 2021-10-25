@@ -12,5 +12,7 @@ jobs:
         with:
           access_token: ${{ github.token }}
       - uses: actions/checkout@v2
-      - name: Run test
-        run: ./x run api cargo test
+      - name: Build
+        run: docker build -t app .
+      - name: Run tests
+        run: docker run app cargo test
