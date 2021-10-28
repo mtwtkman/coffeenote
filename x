@@ -20,7 +20,7 @@ _exec () {
 cmd=$1
 shift
 case $cmd in
-    build) _do "$d build --force-rm";;
+    build) _do "COMPOSE_DOCKER_CLI_BUILD=1 $d build --force-rm";;
     up)
         cmd="$d up -d"
         _do "$cmd"
