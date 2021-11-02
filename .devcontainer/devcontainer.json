@@ -1,0 +1,23 @@
+{
+    "name": "coffeenote",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "features": {
+        "docker-from-docker": {
+            "version": "latest",
+            "moby": true
+        },
+        "git": {
+            "version": "latest",
+            "ppa": false
+        }
+    },
+    "forwardPorts": [55301],
+    "extensions": [
+        "bungcip.better-toml",
+        "zxh404.vscode-proto3",
+        "matklad.rust-analyzer"
+    ]
+}

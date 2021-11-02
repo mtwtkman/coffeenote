@@ -4,13 +4,6 @@ FROM rust:slim
 RUN apt update
 RUN apt install -y pkg-config libssl-dev curl
 RUN adduser --gecos '' --disabled-login --home /app app
-RUN mkdir grpcurl && \
-    cd grpcurl && \
-    curl -L https://github.com/fullstorydev/grpcurl/releases/download/v1.8.5/grpcurl_1.8.5_linux_x86_64.tar.gz -o grpcurl.tar.gz && \
-    tar -zxvf grpcurl.tar.gz && \
-    mv grpcurl /usr/local/bin && \
-    cd ~ && \
-    rm -rf grpcurl
 USER app
 WORKDIR /app
 COPY --chown=app Cargo.toml Cargo.toml
