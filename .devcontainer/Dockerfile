@@ -3,8 +3,6 @@ FROM rust:slim
 
 RUN apt update
 RUN apt install -y pkg-config libssl-dev curl git sudo
-RUN curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
-    chmod +x /usr/local/bin/docker-compose
 RUN mkdir grpcurl && \
     cd grpcurl && \
     curl -L https://github.com/fullstorydev/grpcurl/releases/download/v1.8.5/grpcurl_1.8.5_linux_x86_64.tar.gz -o grpcurl.tar.gz && \

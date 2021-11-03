@@ -9,6 +9,10 @@
             "version": "latest",
             "moby": true
         },
+        "docker-from-docker-compose": {
+            "version": "latest",
+            "moby": true
+        },
         "git": {
             "version": "latest",
             "ppa": false
