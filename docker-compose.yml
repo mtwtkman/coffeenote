@@ -10,15 +10,15 @@ services:
     depends_on:
       - db
     volumes:
-      - $HOST_PROJECT_ROOT/Cargo.lock:/app/Cargo.lock
-      - $HOST_PROJECT_ROOT/Cargo.toml:/app/Cargo.toml
-      - $HOST_PROJECT_ROOT/src:/app/src
-      - $HOST_PROJECT_ROOT/coffeenote-api:/app/coffeenote-api
-      - $HOST_PROJECT_ROOT/coffeenote-core:/app/coffeenote-core
+      - ${HOST_PROJECT_ROOT:-.}/Cargo.lock:/app/Cargo.lock
+      - ${HOST_PROJECT_ROOT:-.}/Cargo.toml:/app/Cargo.toml
+      - ${HOST_PROJECT_ROOT:-.}/src:/app/src
+      - ${HOST_PROJECT_ROOT:-.}/coffeenote-api:/app/coffeenote-api
+      - ${HOST_PROJECT_ROOT:-.}/coffeenote-core:/app/coffeenote-core
   db:
     image: postgres:alpine
     env_file:
-      - coffeenote-api/env_files/db.env
+      - ./coffeenote-api/env_files/db.env
     volumes:
       - "dbdata:/var/lib/postgresql/data"
     ports:
