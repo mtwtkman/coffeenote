@@ -23,5 +23,8 @@
         "bungcip.better-toml",
         "zxh404.vscode-proto3",
         "matklad.rust-analyzer"
-    ]
+    ],
+    "remoteEnv": {
+        "HOST_PROJECT_ROOT": "${localWorkspaceFolder}"
+    }
 }
