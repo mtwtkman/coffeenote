@@ -34,7 +34,15 @@ case $cmd in
         schema=$1
         data=$2
         symbol=$3
-        GODEBUG=x509ignoreCN=0 grpcurl -insecure -servername localhost -cert coffeenote-api/tls/cert.pem -key coffeenote-api/tls/key.pem -import-path ./coffeenote-api/proto -proto $schema.proto -d '$data' localhost:55301 $symbol
+        GODEBUG=x509ignoreCN=0 grpcurl \
+            -insecure \
+            -vv \
+            -cert ./coffeenote-api/tls/cert.pem \
+            -key ./coffeenote-api/tls/key.pem \
+            -import-path ./coffeenote-api/proto \
+            -proto $schema.proto \
+            -d '$data' \
+            172.18.0.3:55301 $symbol
         ;;
     sqlx) _run "api sqlx $@";;
     migrate) ./x sqlx "migrate --source coffeenote-api/migrations $@";;
